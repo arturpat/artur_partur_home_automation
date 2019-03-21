@@ -1,7 +1,7 @@
 import Adafruit_DHT
 from datetime import datetime, date
 from time import sleep
-from ADconverter import AnalogDigitalProxy
+from ADConverter import AnalogDigitalProxy
 
 humidity = None  # type: float
 temperature = None  # type: float

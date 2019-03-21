@@ -2,7 +2,7 @@ import sys
 import os
 from datetime import datetime, date
 from time import sleep
-from ADconverter import AnalogDigitalProxy
+from ADConverter import AnalogDigitalProxy
 from bmp180_reader import BmpSensorProxy
 from display_proxy import DisplayProxy
 from ds18b20_proxy import ds18b20Proxy
@@ -33,14 +33,20 @@ class SensorWatcher(object):
         self.light = 255 - self.ad_proxy.get_readings()
         self.temperature_probe = self.temp_probe_proxy.get_temp()
 
+    def get_summary(self, print_now=False) -> str:
+        summary = 'Temp_bmp: {0:0.1f} C  Temp_probe: {1:0.1f} Pressure: {2} Pa Light: {3}' \
+            .format(self.temperature_bmp, self.temperature_probe, self.pressure, self.light)
+        if print_now:
+            print(summary)
+        return summary
+
     def append_current_results_to_csv(self):
         line = "{},{},{},{},{}\n".format(datetime.now().isoformat(), self.temperature_bmp, self.temperature_probe,
                                          self.pressure, self.light)
         with open(self.fname, 'a') as fd:
             fd.write(line)
 
-        print('File updated: Temp_bmp: {0:0.1f} C  Temp_probe: {1:0.1f} Pressure: {2} Pa Light: {3}'
-              .format(self.temperature_bmp, self.temperature_probe, self.pressure, self.light))
+        print('File updated: ', self.get_summary())
 
     def display_current_results_on_lcd(self):
         self.display_proxy.display_text_lines(["Temp bmp: {} C".format(self.temperature_bmp),
