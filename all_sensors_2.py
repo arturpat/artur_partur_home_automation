@@ -17,7 +17,7 @@ class SensorWatcher(object):
         self.ad_proxy = AnalogDigitalProxy(channel=0)
         self.bmp_proxy = BmpSensorProxy()
         self.display_proxy = DisplayProxy()
-        self.temp_probe_proxy = ds18b20Proxy()
+        # self.temp_probe_proxy = ds18b20Proxy()
 
         try:
             os.mkdir('logs')
@@ -31,7 +31,8 @@ class SensorWatcher(object):
         self.temperature_bmp = self.bmp_proxy.get_temp()
         self.pressure = self.bmp_proxy.get_pressure()
         self.light = 255 - self.ad_proxy.get_readings()
-        self.temperature_probe = self.temp_probe_proxy.get_temp()
+        # self.temperature_probe = self.temp_probe_proxy.get_temp()
+        self.temperature_probe = 0
 
     def get_summary(self, print_now=False) -> str:
         summary = 'Temp_bmp: {0:0.1f} C  Temp_probe: {1:0.1f} Pressure: {2} Pa Light: {3}' \

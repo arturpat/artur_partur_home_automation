@@ -45,14 +45,22 @@ class DisplayProxy(object):
         for n, line in enumerate(lines):
             draw.text((x, top + (n * 16)), line, font=font, fill=255)
 
-        self.disp.image(image)
-        self.disp.display()
+        try:
+            self.disp.image(image)
+            self.disp.display()
+        except OSError:
+            sleep(5)
+            self.disp.reset()
+            self.disp.image(image)
+            self.disp.display()
 
 
 if __name__ == "__main__":
     display_proxy = DisplayProxy()
     display_proxy.display_any_image('db.jpg')
-    sleep(3)
+    sleep(1000)
+    display_proxy.display_text_lines(['asdf'])
+    sleep(2)
     display_proxy.clear_disp()
     bmp_sensor = BmpSensorProxy()
     while True:
