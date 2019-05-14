@@ -58,12 +58,9 @@ class DisplayProxy(object):
 if __name__ == "__main__":
     display_proxy = DisplayProxy()
     display_proxy.display_any_image('db.jpg')
-    sleep(1000)
+    sleep(1)
     display_proxy.display_text_lines(['asdf'])
     sleep(2)
     display_proxy.clear_disp()
-    bmp_sensor = BmpSensorProxy()
-    while True:
-        display_proxy.display_text_lines(bmp_sensor.read_all())
-        sleep(1)
+
 

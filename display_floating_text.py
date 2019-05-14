@@ -1,4 +1,6 @@
-import math
+# This is just copied from Adafruit_SSD1306 project page as it's a good reference point.
+# I am not the creator of this code, all credits go to Adafruit_SSD1306 creators.
+
 import time
 
 import Adafruit_SSD1306

@@ -3,21 +3,22 @@ import os
 from datetime import datetime, date
 from time import sleep
 from ADConverter import AnalogDigitalProxy
-from bmp180_reader import BmpSensorProxy
+from bme280_reader import Bme280SensorProxy
 from display_proxy import DisplayProxy
 from ds18b20_proxy import ds18b20Proxy
 
 
 class SensorWatcher(object):
     def __init__(self):
-        self.temperature_bmp = None  # type: float
-        self.temperature_probe = None  # type: float
-        self.light = None  # type: int
-        self.pressure = None  # type: int
-        self.ad_proxy = AnalogDigitalProxy(channel=0)
-        self.bmp_proxy = BmpSensorProxy()
-        self.display_proxy = DisplayProxy()
-        # self.temp_probe_proxy = ds18b20Proxy()
+        self.temperature_bmp = 0.0  # type: float
+        self.temperature_probe = 0.0  # type: float
+        self.light = 0  # type: int
+        self.pressure = 0  # type: int
+
+        # self.ad_proxy = AnalogDigitalProxy(channel=0)
+        self.bmp_proxy = Bme280SensorProxy()
+        # self.display_proxy = DisplayProxy()
+        self.temp_probe_proxy = ds18b20Proxy()
 
         try:
             os.mkdir('logs')
@@ -30,12 +31,12 @@ class SensorWatcher(object):
     def update_readings(self):
         self.temperature_bmp = self.bmp_proxy.get_temp()
         self.pressure = self.bmp_proxy.get_pressure()
-        self.light = 255 - self.ad_proxy.get_readings()
-        # self.temperature_probe = self.temp_probe_proxy.get_temp()
-        self.temperature_probe = 0
+        # self.light = 255 - self.ad_proxy.get_readings()
+        self.light = 0
+        self.temperature_probe = self.temp_probe_proxy.get_temp()
 
     def get_summary(self, print_now=False) -> str:
-        summary = 'Temp_bmp: {0:0.1f} C  Temp_probe: {1:0.1f} Pressure: {2} Pa Light: {3}' \
+        summary = 'Temp_bmp: {0:0.1f} C  Temp_probe: {1:0.1f} Pressure: {2:0.2f} Pa Light: {3}' \
             .format(self.temperature_bmp, self.temperature_probe, self.pressure, self.light)
         if print_now:
             print(summary)
@@ -63,7 +64,7 @@ if __name__ == "__main__":
     while True:
         sensor_watcher.update_readings()
         reading_time = datetime.now()
-        sensor_watcher.display_current_results_on_lcd()
+        # sensor_watcher.display_current_results_on_lcd()
         sys.stdout.flush()
         sys.stdout.write('.')
         sleep(1)
